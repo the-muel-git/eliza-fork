@@ -13,7 +13,12 @@
         "lint": "bash ./scripts/lint.sh",
         "prettier-check": "npx prettier --check --cache .",
         "prettier": "npx prettier --write --cache .",
-        "clean": "bash ./scripts/clean.sh"
+        "clean": "bash ./scripts/clean.sh",
+        "docker:build": "bash ./scripts/docker.sh build",
+        "docker:run": "bash ./scripts/docker.sh run",
+        "docker:bash": "bash ./scripts/docker.sh bash",
+        "docker:start": "bash ./scripts/docker.sh start",
+        "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "8.16.0",

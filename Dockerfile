@@ -17,9 +17,12 @@ WORKDIR /app
 # Copy package.json and other configuration files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc turbo.json ./
 
-# Copy the rest of the application code
+# Copy only the necessary packages and configurations
 COPY agent ./agent
-COPY packages ./packages
+COPY packages/adapter-redis ./packages/adapter-redis
+COPY packages/client-discord ./packages/client-discord
+COPY packages/client-telegram ./packages/client-telegram
+COPY packages/core ./packages/core
 COPY scripts ./scripts
 COPY characters ./characters
 
@@ -31,7 +34,7 @@ RUN pnpm install \
 # Create a new stage for the final image
 FROM node:23.3.0-slim
 
-# Install runtime dependencies if needed
+# Install runtime dependencies
 RUN npm install -g pnpm@9.4.0 && \
     apt-get update && \
     apt-get install -y git python3 && \
@@ -50,6 +53,9 @@ COPY --from=builder /app/agent ./agent
 COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/characters ./characters
+
+# Set Node.js memory limit
+ENV NODE_OPTIONS="--max-old-space-size=512"
 
 # Set the command to run the application
 CMD ["pnpm", "start"]
