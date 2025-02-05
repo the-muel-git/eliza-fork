@@ -1,61 +1,29 @@
-# Use a specific Node.js version for better reproducibility
-FROM node:23.3.0-slim AS builder
+FROM node:18-alpine AS base
 
-# Install pnpm globally and install necessary build tools
-RUN npm install -g pnpm@9.4.0 && \
-    apt-get update && \
-    apt-get install -y git python3 make g++ && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install pnpm
+RUN npm install -g pnpm@8.6.12
 
-# Set Python 3 as the default python
-RUN ln -s /usr/bin/python3 /usr/bin/python
-
-# Set the working directory
-WORKDIR /app
-
-# Copy package.json and other configuration files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc turbo.json ./
-
-# Copy only the necessary packages and configurations
-COPY agent ./agent
-COPY packages/adapter-redis ./packages/adapter-redis
-COPY packages/client-discord ./packages/client-discord
-COPY packages/client-telegram ./packages/client-telegram
-COPY packages/core ./packages/core
-COPY scripts ./scripts
-COPY characters ./characters
-
-# Install dependencies and build the project
-RUN pnpm install \
-    && pnpm build-docker \
-    && pnpm prune --prod
-
-# Create a new stage for the final image
-FROM node:23.3.0-slim
-
-# Install runtime dependencies
-RUN npm install -g pnpm@9.4.0 && \
-    apt-get update && \
-    apt-get install -y git python3 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-# Copy built artifacts and production dependencies from the builder stage
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-workspace.yaml ./
-COPY --from=builder /app/.npmrc ./
-COPY --from=builder /app/turbo.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/agent ./agent
-COPY --from=builder /app/packages ./packages
-COPY --from=builder /app/scripts ./scripts
-COPY --from=builder /app/characters ./characters
-
-# Set Node.js memory limit
+# Set memory limits for build and runtime
 ENV NODE_OPTIONS="--max-old-space-size=1536"
+ENV PNPM_FLAGS="--no-frozen-lockfile --shamefully-hoist"
 
-# Set the command to run the application
+WORKDIR /app
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+COPY packages/core/package.json ./packages/core/
+COPY packages/adapter-redis/package.json ./packages/adapter-redis/
+COPY packages/client-discord/package.json ./packages/client-discord/
+COPY packages/client-telegram/package.json ./packages/client-telegram/
+
+# Install dependencies with optimized settings
+RUN pnpm install $PNPM_FLAGS
+
+# Copy source files
+COPY . .
+
+# Build packages
+RUN pnpm run build
+
+# Start the application
 CMD ["pnpm", "start"]
