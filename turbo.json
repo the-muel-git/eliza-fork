@@ -5,26 +5,41 @@
         "build": {
             "outputs": ["dist/**"],
             "dependsOn": ["^build"],
-            "env": ["NODE_OPTIONS"]
+            "env": ["NODE_OPTIONS"],
+            "cache": true,
+            "outputMode": "errors-only"
         },
         "@elizaos/core#build": {
             "outputs": ["dist/**"],
-            "env": ["NODE_OPTIONS"]
+            "env": ["NODE_OPTIONS"],
+            "cache": true,
+            "outputMode": "errors-only"
         },
         "@elizaos/adapter-redis#build": {
             "outputs": ["dist/**"],
             "dependsOn": ["@elizaos/core#build"],
-            "env": ["NODE_OPTIONS"]
+            "env": ["NODE_OPTIONS"],
+            "cache": true,
+            "outputMode": "errors-only"
         },
         "@elizaos/client-discord#build": {
             "outputs": ["dist/**"],
             "dependsOn": ["@elizaos/core#build"],
-            "env": ["NODE_OPTIONS"]
+            "env": ["NODE_OPTIONS"],
+            "cache": true,
+            "outputMode": "errors-only"
         },
         "@elizaos/client-telegram#build": {
             "outputs": ["dist/**"],
             "dependsOn": ["@elizaos/core#build"],
             "env": ["NODE_OPTIONS"]
+        },
+        "@elizaos/plugin-node#build": {
+            "outputs": ["dist/**"],
+            "dependsOn": ["@elizaos/core#build"],
+            "env": ["NODE_OPTIONS"],
+            "cache": true,
+            "outputMode": "errors-only"
         }
     }
 }
