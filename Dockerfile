@@ -1,14 +1,25 @@
-FROM node:18-alpine AS builder
+FROM node:23.3.0-alpine AS builder
 
 # Install minimal build dependencies
-RUN apk add --no-cache python3 make g++ git
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    cmake \
+    build-base \
+    linux-headers
 
 # Install pnpm
-RUN npm install -g pnpm@8.6.12
+RUN npm install -g pnpm@9.14.4
 
 # Set memory optimization flags for build
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-ENV PNPM_FLAGS="--prod --no-frozen-lockfile --shamefully-hoist"
+ENV PNPM_FLAGS="--prod --frozen-lockfile --shamefully-hoist"
+
+# Enable Turbo caching
+ENV TURBO_TEAM="sambot"
+ENV TURBO_REMOTE_ONLY=true
 
 WORKDIR /app
 
@@ -58,9 +69,16 @@ RUN node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/core &&
     node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/agent
 
 # Start fresh for runtime
-FROM node:18-alpine
+FROM node:23.3.0-alpine
 
 WORKDIR /app
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    git \
+    cmake \
+    build-base \
+    python3
 
 # Copy workspace configuration
 COPY --from=builder /app/package.json /app/pnpm-workspace.yaml ./
@@ -89,17 +107,16 @@ COPY --from=builder /app/agent/package.json ./agent/
 COPY --from=builder /app/agent/dist ./agent/dist
 
 # Install runtime dependencies only (with increased memory limit for installation)
-RUN apk add --no-cache git && \
-    npm install -g pnpm@8.6.12 && \
+RUN npm install -g pnpm@9.14.4 && \
     node --max-old-space-size=4096 $(which pnpm) install --prod --no-frozen-lockfile
 
 # Set runtime memory limit and configuration
-ENV NODE_OPTIONS="--max-old-space-size=256"
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 ENV CHARACTER_FILE="eternalai.character.json"
 ENV MODEL_PROVIDER="openai"
 ENV TOKENIZER_MODEL="gpt-4"
 ENV TOKENIZER_TYPE="tiktoken"
 ENV ENABLED_CLIENTS="discord"
 
-# Start the application
-CMD ["pnpm", "--filter=@elizaos/agent", "start", "--isRoot"]
+# Start the application with increased memory
+CMD ["node", "--max-old-space-size=1536", "$(which pnpm)", "--filter=@elizaos/agent", "start", "--isRoot"]
