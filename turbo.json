@@ -15,13 +15,6 @@
             "cache": true,
             "outputMode": "errors-only"
         },
-        "@elizaos/adapter-redis#build": {
-            "outputs": ["dist/**"],
-            "dependsOn": ["@elizaos/core#build"],
-            "env": ["NODE_OPTIONS"],
-            "cache": true,
-            "outputMode": "errors-only"
-        },
         "@elizaos/client-discord#build": {
             "outputs": ["dist/**"],
             "dependsOn": ["@elizaos/core#build"],
