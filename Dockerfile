@@ -1,7 +1,7 @@
 FROM node:18-alpine AS builder
 
 # Install minimal build dependencies
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ git
 
 # Install pnpm
 RUN npm install -g pnpm@8.6.12
@@ -89,7 +89,8 @@ COPY --from=builder /app/agent/package.json ./agent/
 COPY --from=builder /app/agent/dist ./agent/dist
 
 # Install runtime dependencies only
-RUN npm install -g pnpm@8.6.12 && \
+RUN apk add --no-cache git && \
+    npm install -g pnpm@8.6.12 && \
     pnpm install --prod --no-frozen-lockfile
 
 # Set runtime memory limit and configuration
