@@ -1,35 +1,61 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
-# Install required build dependencies
+# Install minimal build dependencies
 RUN apk add --no-cache python3 make g++
 
 # Install pnpm
 RUN npm install -g pnpm@8.6.12
 
-# Set memory limit for build and runtime
-ENV NODE_OPTIONS="--max-old-space-size=1536"
+# Set memory optimization flags for build
+ENV NODE_OPTIONS="--max-old-space-size=256"
+ENV PNPM_FLAGS="--prod --no-frozen-lockfile --shamefully-hoist"
 
-# Set working directory
 WORKDIR /app
 
-# Copy workspace configuration files
-COPY pnpm-workspace.yaml turbo.json ./
-
-# Copy package files first to leverage Docker cache
-COPY package.json pnpm-lock.yaml ./
+# Copy only necessary files
+COPY package.json pnpm-workspace.yaml turbo.json ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/adapter-redis/package.json ./packages/adapter-redis/
 COPY packages/client-discord/package.json ./packages/client-discord/
-COPY packages/client-telegram/package.json ./packages/client-telegram/
 
-# Install dependencies with optimized flags
-RUN pnpm install --no-frozen-lockfile --shamefully-hoist
+# Install only production dependencies
+RUN pnpm install $PNPM_FLAGS \
+    --filter=@elizaos/core \
+    --filter=@elizaos/client-discord \
+    --filter=@elizaos/adapter-redis
 
-# Copy source files
-COPY . .
+# Copy source files for required packages only
+COPY packages/core/src ./packages/core/src
+COPY packages/core/types ./packages/core/types
+COPY packages/adapter-redis/src ./packages/adapter-redis/src
+COPY packages/client-discord/src ./packages/client-discord/src
+COPY tsconfig.json ./
 
-# Build only required packages
-RUN pnpm build --filter=@elizaos/core --filter=@elizaos/client-discord --filter=@elizaos/adapter-redis
+# Build packages sequentially
+RUN pnpm build --filter=@elizaos/core && \
+    pnpm build --filter=@elizaos/adapter-redis && \
+    pnpm build --filter=@elizaos/client-discord
+
+# Start fresh for runtime
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy only what's needed for runtime
+COPY --from=builder /app/package.json /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/packages/core/package.json ./packages/core/
+COPY --from=builder /app/packages/core/dist ./packages/core/dist
+COPY --from=builder /app/packages/adapter-redis/package.json ./packages/adapter-redis/
+COPY --from=builder /app/packages/adapter-redis/dist ./packages/adapter-redis/dist
+COPY --from=builder /app/packages/client-discord/package.json ./packages/client-discord/
+COPY --from=builder /app/packages/client-discord/dist ./packages/client-discord/dist
+
+# Install runtime dependencies only
+RUN npm install -g pnpm@8.6.12 && \
+    pnpm install --prod --no-frozen-lockfile
+
+# Set runtime memory limit
+ENV NODE_OPTIONS="--max-old-space-size=256"
 
 # Start the application
 CMD ["pnpm", "start"]
