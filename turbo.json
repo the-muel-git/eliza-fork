@@ -4,22 +4,27 @@
     "tasks": {
         "build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["^build"]
+            "dependsOn": ["^build"],
+            "env": ["NODE_OPTIONS"]
         },
         "@elizaos/core#build": {
-            "outputs": ["dist/**"]
+            "outputs": ["dist/**"],
+            "env": ["NODE_OPTIONS"]
         },
         "@elizaos/adapter-redis#build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["@elizaos/core#build"]
+            "dependsOn": ["@elizaos/core#build"],
+            "env": ["NODE_OPTIONS"]
         },
         "@elizaos/client-discord#build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["@elizaos/core#build"]
+            "dependsOn": ["@elizaos/core#build"],
+            "env": ["NODE_OPTIONS"]
         },
         "@elizaos/client-telegram#build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["@elizaos/core#build"]
+            "dependsOn": ["@elizaos/core#build"],
+            "env": ["NODE_OPTIONS"]
         }
     }
 }
