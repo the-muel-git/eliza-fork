@@ -55,7 +55,7 @@ COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/characters ./characters
 
 # Set Node.js memory limit
-ENV NODE_OPTIONS="--max-old-space-size=512"
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 
 # Set the command to run the application
 CMD ["pnpm", "start"]
