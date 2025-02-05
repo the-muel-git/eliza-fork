@@ -7,7 +7,7 @@ RUN apk add --no-cache python3 make g++ git
 RUN npm install -g pnpm@8.6.12
 
 # Set memory optimization flags for build
-ENV NODE_OPTIONS="--max-old-space-size=256"
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV PNPM_FLAGS="--prod --no-frozen-lockfile --shamefully-hoist"
 
 WORKDIR /app
@@ -31,8 +31,8 @@ COPY agent/jest.config.js ./agent/
 # Create necessary directories
 RUN mkdir -p agent/data agent/content_cache
 
-# Install dependencies for all packages
-RUN pnpm install $PNPM_FLAGS \
+# Install dependencies for all packages (with increased memory limit)
+RUN node --max-old-space-size=4096 $(which pnpm) install $PNPM_FLAGS \
     --filter=@elizaos/core \
     --filter=@elizaos/plugin-node \
     --filter=@elizaos/client-discord \
@@ -49,13 +49,13 @@ COPY packages/adapter-supabase/src ./packages/adapter-supabase/src
 COPY packages/client-telegram/src ./packages/client-telegram/src
 COPY agent/src ./agent/src
 
-# Build packages in correct order
-RUN pnpm build --filter=@elizaos/core && \
-    pnpm build --filter=@elizaos/plugin-node && \
-    pnpm build --filter=@elizaos/adapter-supabase && \
-    pnpm build --filter=@elizaos/client-discord && \
-    pnpm build --filter=@elizaos/client-telegram && \
-    pnpm build --filter=@elizaos/agent
+# Build packages in correct order (with increased memory limit)
+RUN node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/core && \
+    node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/plugin-node && \
+    node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/adapter-supabase && \
+    node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/client-discord && \
+    node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/client-telegram && \
+    node --max-old-space-size=4096 $(which pnpm) build --filter=@elizaos/agent
 
 # Start fresh for runtime
 FROM node:18-alpine
@@ -88,10 +88,10 @@ COPY --from=builder /app/packages/client-telegram/dist ./packages/client-telegra
 COPY --from=builder /app/agent/package.json ./agent/
 COPY --from=builder /app/agent/dist ./agent/dist
 
-# Install runtime dependencies only
+# Install runtime dependencies only (with increased memory limit for installation)
 RUN apk add --no-cache git && \
     npm install -g pnpm@8.6.12 && \
-    pnpm install --prod --no-frozen-lockfile
+    node --max-old-space-size=4096 $(which pnpm) install --prod --no-frozen-lockfile
 
 # Set runtime memory limit and configuration
 ENV NODE_OPTIONS="--max-old-space-size=256"
