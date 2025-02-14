@@ -1,0 +1,36 @@
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: pnpm --filter "@elizaos/agent" start --isRoot
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SERVER_PORT=3000
+      - USE_CHARACTER_STORAGE=true
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DEFAULT_LOG_LEVEL=info
+      - LOG_JSON_FORMAT=false
+      - DISCORD_APPLICATION_ID=${DISCORD_APPLICATION_ID}
+      - DISCORD_API_TOKEN=${DISCORD_API_TOKEN}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    volumes:
+      - ./characters:/app/characters
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: pnpm --dir client dev --host
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./client:/app/client
+    restart: unless-stopped 

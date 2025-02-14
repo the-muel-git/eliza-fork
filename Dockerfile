@@ -1,5 +1,5 @@
 # Use a specific Node.js version for better reproducibility
-FROM node:23.3.0-slim AS builder
+FROM --platform=$TARGETPLATFORM node:23.3.0-slim AS builder
 
 # Install pnpm globally and necessary build tools
 RUN npm install -g pnpm@9.15.4 && \
@@ -34,17 +34,29 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 # Set the working directory
 WORKDIR /app
 
-# Copy application code
-COPY . .
+# Copy package files first for better caching
+COPY package.json pnpm-workspace.yaml .npmrc turbo.json ./
 
-# Install dependencies
-RUN pnpm install --no-frozen-lockfile
+# Copy the entire packages directory
+COPY packages ./packages/
+
+# Copy the agent and client package.json files
+COPY agent/package.json ./agent/
+COPY client/package.json ./client/
+
+# Clear any existing dependencies and install fresh
+RUN rm -rf node_modules pnpm-lock.yaml && \
+    pnpm store prune && \
+    pnpm install --no-frozen-lockfile
+
+# Copy the rest of the application code
+COPY . .
 
 # Build the project
 RUN pnpm run build && pnpm prune --prod
 
 # Final runtime image
-FROM node:23.3.0-slim
+FROM --platform=$TARGETPLATFORM node:23.3.0-slim
 
 # Install runtime dependencies
 RUN npm install -g pnpm@9.15.4 && \
@@ -52,7 +64,8 @@ RUN npm install -g pnpm@9.15.4 && \
     apt-get install -y \
     git \
     python3 \
-    ffmpeg && \
+    ffmpeg \
+    curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -76,4 +89,4 @@ COPY --from=builder /app/characters ./characters
 EXPOSE 3000 5173
 
 # Command to start the application
-CMD ["sh", "-c", "pnpm start & pnpm start:client"]
+CMD ["sh", "-c", "pnpm start & pnpm --dir client dev --host"]

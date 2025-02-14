@@ -59,13 +59,10 @@
       "cookie": "0.7.0",
       "bs58": "5.0.0",
       "@coral-xyz/anchor": "0.28.0"
-    },
-    "patchedDependencies": {
-      "@solana-developers/helpers": "patches/@solana-developers__helpers.patch"
     }
   },
   "engines": {
-    "node": "23.3.0"
+    "node": ">=20.11.1"
   },
   "dependencies": {
     "@0glabs/0g-ts-sdk": "0.2.1",
