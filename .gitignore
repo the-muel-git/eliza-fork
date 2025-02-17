@@ -217,6 +217,60 @@ packages/plugin-*/
 !packages/plugin-node/
 !packages/plugin-openai/
 
+# Blockchain and Trading plugins
+packages/plugin-rabbi-trader/
+packages/plugin-solana/
+packages/plugin-solana-v2/
+packages/plugin-injective/
+packages/plugin-binance/
+packages/plugin-evm/
+packages/plugin-ethereum/
+packages/plugin-avalanche/
+packages/plugin-cosmos/
+packages/plugin-aptos/
+packages/plugin-sui/
+packages/plugin-near/
+packages/plugin-ton/
+packages/plugin-tron/
+packages/plugin-arbitrage/
+packages/plugin-defi/
+packages/plugin-dex/
+packages/plugin-zerion/
+packages/plugin-squid-router/
+packages/plugin-0x/
+packages/plugin-1inch/
+packages/plugin-uniswap/
+
+# AI and Generation plugins
+packages/plugin-image-generation/
+packages/plugin-video-generation/
+packages/plugin-3d-generation/
+packages/plugin-nft-generation/
+packages/plugin-story/
+packages/plugin-suno/
+packages/plugin-devin/
+
+# Utility and Integration plugins
+packages/plugin-giphy/
+packages/plugin-imgflip/
+packages/plugin-open-weather/
+packages/plugin-web-search/
+packages/plugin-news/
+packages/plugin-email/
+packages/plugin-form/
+
+# Infrastructure plugins
+packages/plugin-bittensor/
+packages/plugin-hyperliquid/
+packages/plugin-arthera/
+packages/plugin-allora/
+packages/plugin-opacity/
+packages/plugin-akash/
+packages/plugin-quai/
+packages/plugin-lightning/
+packages/plugin-b2/
+packages/plugin-nft-collections/
+
 # IDE and OS files
 .idea/
 .vscode/
