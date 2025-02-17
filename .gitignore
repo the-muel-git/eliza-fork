@@ -207,18 +207,17 @@ packages/adapter-mongodb/
 packages/adapter-qdrant/
 packages/adapter-sqljs/
 
-# Plugins to exclude
+# Plugins to exclude (all by default)
 packages/plugin-*/
 
-# Keep essential plugins
+# Keep only essential core plugins
 !packages/plugin-abstract/
 !packages/plugin-bootstrap/
 !packages/plugin-di/
 !packages/plugin-node/
 !packages/plugin-openai/
 
-# Blockchain and Trading plugins
-packages/plugin-rabbi-trader/
+# Protocol and Chain plugins
 packages/plugin-solana/
 packages/plugin-solana-v2/
 packages/plugin-injective/
@@ -232,6 +231,22 @@ packages/plugin-sui/
 packages/plugin-near/
 packages/plugin-ton/
 packages/plugin-tron/
+packages/plugin-starknet/
+packages/plugin-zksync/
+packages/plugin-polkadot/
+packages/plugin-multiversx/
+packages/plugin-flow/
+packages/plugin-icp/
+packages/plugin-massa/
+packages/plugin-mina/
+packages/plugin-sei/
+packages/plugin-cronos/
+packages/plugin-cronoszkevm/
+packages/plugin-fuel/
+packages/plugin-zilliqa/
+
+# DeFi and Trading plugins
+packages/plugin-rabbi-trader/
 packages/plugin-arbitrage/
 packages/plugin-defi/
 packages/plugin-dex/
@@ -240,6 +255,15 @@ packages/plugin-squid-router/
 packages/plugin-0x/
 packages/plugin-1inch/
 packages/plugin-uniswap/
+packages/plugin-desk-exchange/
+packages/plugin-dexscreener/
+packages/plugin-hyperliquid/
+packages/plugin-birdeye/
+packages/plugin-chainbase/
+packages/plugin-coingecko/
+packages/plugin-coinmarketcap/
+packages/plugin-coinbase/
+packages/plugin-moralis/
 
 # AI and Generation plugins
 packages/plugin-image-generation/
@@ -249,6 +273,10 @@ packages/plugin-nft-generation/
 packages/plugin-story/
 packages/plugin-suno/
 packages/plugin-devin/
+packages/plugin-quick-intel/
+packages/plugin-mind-network/
+packages/plugin-echochambers/
+packages/plugin-letzai/
 
 # Utility and Integration plugins
 packages/plugin-giphy/
@@ -258,10 +286,14 @@ packages/plugin-web-search/
 packages/plugin-news/
 packages/plugin-email/
 packages/plugin-form/
+packages/plugin-gitbook/
+packages/plugin-obsidian/
+packages/plugin-intiface/
+packages/plugin-football/
+packages/plugin-nvidia-nim/
 
-# Infrastructure plugins
+# Infrastructure and Network plugins
 packages/plugin-bittensor/
-packages/plugin-hyperliquid/
 packages/plugin-arthera/
 packages/plugin-allora/
 packages/plugin-opacity/
@@ -270,6 +302,23 @@ packages/plugin-quai/
 packages/plugin-lightning/
 packages/plugin-b2/
 packages/plugin-nft-collections/
+packages/plugin-tee/
+packages/plugin-tee-log/
+packages/plugin-tee-marlin/
+packages/plugin-tee-verifiable-log/
+packages/plugin-sgx/
+packages/plugin-dcap/
+packages/plugin-autonome/
+packages/plugin-primus/
+packages/plugin-iq6900/
+packages/plugin-genlayer/
+packages/plugin-depin/
+packages/plugin-pyth-data/
+packages/plugin-router-nitro/
+packages/plugin-holdstation/
+packages/plugin-ethstorage/
+packages/plugin-ankr/
+packages/plugin-trikon/
 
 # IDE and OS files
 .idea/
