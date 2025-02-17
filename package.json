@@ -6,8 +6,8 @@
     "check": "biome check --apply .",
     "preinstall": "npx only-allow pnpm",
     "build": "npx turbo run build --filter=!eliza-docs",
-    "start": "pnpm --filter \"@elizaos/agent\" start --isRoot",
-    "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* pnpm --filter \"@elizaos/agent\" start --isRoot",
+    "start": "cross-env NODE_OPTIONS='--max-old-space-size=4096' pnpm --filter \"@elizaos/agent\" start --isRoot",
+    "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* NODE_OPTIONS='--max-old-space-size=4096' pnpm --filter \"@elizaos/agent\" start --isRoot",
     "clean": "bash ./scripts/clean.sh",
     "test": "bash ./scripts/test.sh"
   },
