@@ -1,3 +1,80 @@
+# Dependencies
+node_modules
+.env
+dist/
+logs/
+
+# Build and development artifacts
+.turbo
+.cursorrules
+.pnpm-store
+coverage
+.eslintcache
+tsup.config.bundled_*.mjs
+
+# IDE and system files
+.idea
+.vscode
+.zed
+.DS_Store
+*.swp
+*.swo
+
+# Cache and temporary files
+cache/
+content_cache/
+tokencache/
+*.log
+*.tmp
+*.temp
+
+# Build outputs
+*.tsbuildinfo
+coverage/
+
+# Exclude all packages by default
+packages/**/
+
+# Keep only essential core packages
+!packages/core/
+!packages/adapter-supabase/
+!packages/adapter-postgres/
+!packages/adapter-sqlite/
+!packages/client-direct/
+!packages/client-discord/
+!packages/client-telegram/
+!packages/client-telegram-account/
+
+# Keep only essential core plugins
+!packages/plugin-abstract/
+!packages/plugin-bootstrap/
+!packages/plugin-di/
+!packages/plugin-node/
+!packages/plugin-openai/
+
+# Binary and large files
+*.gguf
+*.onnx
+*.wav
+*.mp3
+*.bin
+
+# Database files
+*.sqlite
+db.sqlite
+pgLite/
+
+# Test and debug files
+test-report.json
+test_data/
+
+# Character configurations
+characters/**/secrets.json
+characters/**/*.env
+characters/**/*.key
+characters/**/private/
+!characters/eternalai.character.json
+
 node_modules
 /out
 
