@@ -1,0 +1,31 @@
+services:
+  - type: worker
+    name: eliza-worker
+    env: node
+    buildCommand: pnpm install --frozen-lockfile; pnpm run build
+    startCommand: pnpm run start
+    nodeVersion: 23.3.0
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CACHE_STORE
+        value: database
+      - key: SERVER_PORT
+        value: 3000
+      - key: SUPABASE_URL
+        sync: false  # This will be set manually in Render
+      - key: SUPABASE_ANON_KEY
+        sync: false  # This will be set manually in Render
+      - key: SUPABASE_SERVICE_KEY
+        sync: false  # This will be set manually in Render
+      - key: PNPM_VERSION
+        value: 9.15.0
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"  # Ensures dev dependencies are installed for build
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - packages/**
+        - package.json
+        - pnpm-lock.yaml
+        - turbo.json 
