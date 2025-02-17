@@ -1,3 +1,71 @@
+# Source files
+src/
+__tests__/
+*.test.ts
+*.spec.ts
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+
+# Dependencies
+node_modules/
+.env
+.env.*
+
+# Build artifacts
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# IDE and OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store
+*.log
+
+# Packages to exclude
+packages/client-twitter/
+packages/client-instagram/
+packages/client-github/
+packages/client-slack/
+packages/client-auto/
+packages/client-farcaster/
+packages/client-deva/
+packages/client-lens/
+packages/client-simsai/
+packages/client-alexa/
+packages/client-xmtp/
+
+# Adapters to exclude
+packages/adapter-pglite/
+packages/adapter-redis/
+packages/adapter-mongodb/
+packages/adapter-qdrant/
+packages/adapter-sqljs/
+
+# Plugins to exclude
+packages/plugin-*/
+
+# Keep essential plugins
+!packages/plugin-abstract/
+!packages/plugin-bootstrap/
+!packages/plugin-di/
+!packages/plugin-node/
+!packages/plugin-openai/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Source maps
+*.map
+
+# Git files
+.git/
+.gitignore
+
 # Keep only required packages
 !packages/core
 !packages/client-discord

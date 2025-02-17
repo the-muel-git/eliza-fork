@@ -158,3 +158,73 @@ instructions.md
 packages/client-twitter/
 packages/adapter-sqljs/
 packages/plugin-twitter/
+
+# Additional plugins to exclude
+packages/plugin-giphy/
+packages/plugin-imgflip/
+packages/plugin-suno/
+packages/plugin-open-weather/
+packages/plugin-nft-generation/
+packages/plugin-3d-generation/
+packages/plugin-image-generation/
+packages/plugin-video-generation/
+packages/plugin-rabbi-trader/
+packages/plugin-bittensor/
+packages/plugin-hyperliquid/
+packages/plugin-devin/
+packages/plugin-arthera/
+packages/plugin-allora/
+packages/plugin-opacity/
+packages/plugin-akash/
+packages/plugin-quai/
+packages/plugin-lightning/
+packages/plugin-b2/
+packages/plugin-nft-collections/
+
+# Dependencies
+node_modules
+.env
+dist/
+logs/
+
+# Packages to exclude
+packages/client-twitter/
+packages/client-instagram/
+packages/client-github/
+packages/client-slack/
+packages/client-auto/
+packages/client-farcaster/
+packages/client-deva/
+packages/client-lens/
+packages/client-simsai/
+packages/client-alexa/
+packages/client-xmtp/
+
+# Adapters to exclude
+packages/adapter-pglite/
+packages/adapter-redis/
+packages/adapter-mongodb/
+packages/adapter-qdrant/
+packages/adapter-sqljs/
+
+# Plugins to exclude
+packages/plugin-*/
+
+# Keep essential plugins
+!packages/plugin-abstract/
+!packages/plugin-bootstrap/
+!packages/plugin-di/
+!packages/plugin-node/
+!packages/plugin-openai/
+
+# IDE and OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store
+*.log
+
+# Build artifacts
+*.tsbuildinfo
+.turbo
+coverage/
