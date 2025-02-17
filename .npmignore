@@ -1,0 +1,86 @@
+# Keep only required packages
+!packages/core
+!packages/client-discord
+!packages/client-telegram
+!packages/plugin-elevenlabs
+!packages/adapter-supabase
+
+# Exclude all other packages
+packages/*
+
+# Development files
+*.log
+*.tsbuildinfo
+.turbo
+.next
+.env*
+dist
+node_modules
+coverage
+.nyc_output
+.DS_Store
+*.swp
+*.swo
+
+# Source maps and documentation
+*.map
+*.md
+docs/
+
+# Build artifacts
+build/
+*.tgz
+*.tar.gz
+
+# Test files
+test/
+tests/
+__tests__/
+*.test.*
+*.spec.*
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-*
+
+# Debug and cache directories
+packages/debug_audio/
+packages/content_cache/
+
+# Unused clients
+packages/client-twitter/
+packages/client-instagram/
+packages/client-github/
+packages/client-slack/
+packages/client-auto/
+packages/client-farcaster/
+packages/client-eliza-home/
+packages/client-deva/
+
+# Unused adapters
+packages/adapter-pglite/
+packages/adapter-redis/
+packages/adapter-mongodb/
+packages/adapter-qdrant/
+packages/adapter-sqljs/
+
+# Unused plugins
+packages/plugin-*/
+
+# Development configs
+**/.eslintrc*
+**/.prettierrc*
+**/tsconfig.json
+**/jest.config.js
+
+# Documentation
+**/docs/
+**/README.md
+**/CHANGELOG.md
+**/LICENSE
+
+# Build artifacts
+**/dist/
+**/.turbo/
+**/node_modules/ 

@@ -190,3 +190,45 @@ We now have a [paper](https://arxiv.org/pdf/2501.06781) you can cite for the Eli
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=elizaos/eliza&type=Date)](https://star-history.com/#elizaos/eliza&Date)
+
+## Character Configuration
+
+Eliza uses character files to define its personality and behavior. Characters are stored in the `characters/` directory.
+
+### Default Character
+
+The default character is TrollDetective.Exe, defined in `characters/eternalai.character.json`. This is the original Eliza personality.
+
+### Using Different Characters
+
+You can start Eliza with a specific character:
+```bash
+pnpm start --character="characters/eternalai.character.json"
+```
+
+### Character Storage
+
+Characters are managed through:
+- Local files in the `characters/` directory
+- Remote URLs specified in `REMOTE_CHARACTER_URLS`
+- Dynamic loading via command line parameters
+
+### Runtime Configuration
+
+Configure character behavior through environment variables:
+```bash
+# Basic Configuration
+USE_CHARACTER_STORAGE=true      # Enable character storage
+CHARACTER_FILE=characters/eternalai.character.json  # Default character
+
+# Advanced Features
+CHARACTER_MEMORY_ENABLED=true   # Enable memory tracking
+CHARACTER_VOICE_ENABLED=true    # Enable voice features
+CHARACTER_AUTO_LEARN=true       # Enable learning from conversations
+
+# Performance Settings
+CHARACTER_MEMORY_TTL=2592000    # Memory retention (30 days)
+CHARACTER_MEMORY_LIMIT=1000     # Max memories per character
+```
+
+See the [characters/README.md](characters/README.md) for detailed documentation.

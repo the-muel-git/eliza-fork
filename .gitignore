@@ -19,6 +19,9 @@ node-compile-cache
 dist/
 # Allow models directory but ignore model files
 models/*.gguf
+models/*.bin
+models/*.onnx
+models/cache/
 pgLite/
 
 cookies.json
@@ -49,6 +52,7 @@ characters/**/secrets.json
 characters/**/*.env
 characters/**/*.key
 characters/**/private/
+characters/edriziai-info/
 
 packages/core/src/providers/cache
 packages/core/src/providers/cache/*
@@ -98,3 +102,54 @@ ton_nft_metadata/*
 
 ton_nft_images/
 ton_nft_images/*
+
+# Character files
+characters/my_private_character.json
+characters/*.private.json
+characters/edriziai-info/
+
+# Keep the original character files
+!characters/eternalai.character.json
+
+# Temporary and system files
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Large binary files
+*.bin
+*.dat
+*.gz
+*.tar
+*.zip
+*.7z
+
+# Local development
+node-compile-cache/
+
+# Deployment specific
+eliza.manifest
+eliza.manifest.sgx
+eliza.sig
+
+# Bug hunter and testing
+scripts/bug_hunt/logs/
+scripts/bug_hunt/logs/*.log
+scripts/bug_hunt/checkpoints/
+scripts/bug_hunt/checkpoints/*.json
+scripts/bug_hunt/reports/
+scripts/bug_hunt/reports/*.md
+
+# Configuration files
+wallet_data.txt
+
+# Extra directories
+extra/
+**/dist/**
+ton_nft_metadata/
+ton_nft_images/
+
+# Temporary development files
+instructions.md

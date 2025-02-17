@@ -35,9 +35,19 @@
       "messageHandlerTemplate": "You are {{agentName}}, responding to a Telegram message. Keep responses concise and engaging.",
       "shouldRespondTemplate": "Determine if {{agentName}} should respond to this Telegram message."
     },
+    "memory": {
+      "enabled": true,
+      "ttl": 2592000,
+      "limit": 500,
+      "autoLearn": true
+    },
     "voice": {
       "provider": "elevenlabs",
-      "voiceId": "21m00Tcm4TlvDq8ikWAM"
+      "voiceId": "21m00Tcm4TlvDq8ikWAM",
+      "stability": 0.5,
+      "similarityBoost": 0.9,
+      "style": 0.66,
+      "useSpeakerBoost": false
     },
     "model": "gpt-4",
     "embeddingModel": "text-embedding-3-small",
