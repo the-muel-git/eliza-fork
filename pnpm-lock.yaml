@@ -36,9 +36,6 @@ importers:
       amqplib:
         specifier: 0.10.5
         version: 0.10.5
-      bs58:
-        specifier: 5.0.0
-        version: 5.0.0
       langdetect:
         specifier: ^0.2.1
         version: 0.2.1
@@ -48,9 +45,6 @@ importers:
       pnpm:
         specifier: 9.15.0
         version: 9.15.0
-      sharp:
-        specifier: 0.33.5
-        version: 0.33.5
       turbo:
         specifier: 2.3.3
         version: 2.3.3
@@ -118,6 +112,9 @@ importers:
       '@elizaos/client-farcaster':
         specifier: workspace:*
         version: link:../packages/client-farcaster
+      '@elizaos/client-github':
+        specifier: workspace:*
+        version: link:../packages/client-github
       '@elizaos/client-instagram':
         specifier: workspace:*
         version: link:../packages/client-instagram
@@ -460,9 +457,6 @@ importers:
       '@elizaos/plugin-trikon':
         specifier: workspace:*
         version: link:../packages/plugin-trikon
-      '@elizaos/plugin-twitter':
-        specifier: workspace:*
-        version: link:../packages/plugin-twitter
       '@elizaos/plugin-udio':
         specifier: workspace:*
         version: link:../packages/plugin-udio
@@ -1137,7 +1131,7 @@ importers:
         specifier: ^1.45.3
         version: 1.46.1
       sharp:
-        specifier: ^0.33.2
+        specifier: 0.33.5
         version: 0.33.5
     devDependencies:
       '@types/sharp':
@@ -2228,9 +2222,6 @@ importers:
 
   packages/plugin-bittensor:
     dependencies:
-      '@elizaos/client-twitter':
-        specifier: workspace:*
-        version: link:../client-twitter
       '@elizaos/core':
         specifier: workspace:*
         version: link:../core
@@ -4211,9 +4202,9 @@ importers:
 
   packages/plugin-rabbi-trader:
     dependencies:
-      '@elizaos/client-twitter':
+      '@elizaos/client-telegram-account':
         specifier: workspace:*
-        version: link:../client-twitter
+        version: link:../client-telegram-account
       '@elizaos/core':
         specifier: workspace:*
         version: link:../core
@@ -4523,9 +4514,6 @@ importers:
       optional:
         specifier: 0.1.4
         version: 0.1.4
-      sharp:
-        specifier: 0.33.5
-        version: 0.33.5
       tsup:
         specifier: 8.3.5
         version: 8.3.5(@swc/core@1.10.16(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.2)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
@@ -32728,7 +32716,7 @@ snapshots:
       '@anthropic-ai/sdk': 0.30.1(encoding@0.1.13)
       '@fal-ai/client': 1.2.0
       '@types/uuid': 10.0.0
-      ai: 3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.24.1))(react@19.0.0)(sswr@2.1.0(svelte@5.20.1))(svelte@5.20.1)(vue@3.5.13(typescript@5.7.3))(zod@3.23.8)
+      ai: 3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))(react@19.0.0)(sswr@2.1.0(svelte@5.20.1))(svelte@5.20.1)(vue@3.5.13(typescript@5.7.3))(zod@3.23.8)
       anthropic-vertex-ai: 1.0.2(encoding@0.1.13)(zod@3.23.8)
       fastembed: 1.14.1
       fastestsmallesttextencoderdecoder: 1.0.22
@@ -32781,7 +32769,7 @@ snapshots:
       '@fal-ai/client': 1.2.0
       '@tavily/core': 0.0.2
       '@types/uuid': 10.0.0
-      ai: 3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.24.1))(react@19.0.0)(sswr@2.1.0(svelte@5.20.1))(svelte@5.20.1)(vue@3.5.13(typescript@5.7.3))(zod@3.23.8)
+      ai: 3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))(react@19.0.0)(sswr@2.1.0(svelte@5.20.1))(svelte@5.20.1)(vue@3.5.13(typescript@5.7.3))(zod@3.23.8)
       anthropic-vertex-ai: 1.0.2(encoding@0.1.13)(zod@3.23.8)
       dotenv: 16.4.5
       fastembed: 1.14.1
@@ -47640,29 +47628,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  ai@3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))(zod@3.23.8):
-    dependencies:
-      '@ai-sdk/provider': 1.0.6
-      '@ai-sdk/provider-utils': 2.1.6(zod@3.23.8)
-      '@ai-sdk/react': 0.0.70(react@19.0.0)(zod@3.23.8)
-      '@ai-sdk/solid': 0.0.54(zod@3.23.8)
-      '@ai-sdk/svelte': 0.0.57(svelte@5.20.1)(zod@3.23.8)
-      '@ai-sdk/ui-utils': 0.0.50(zod@3.23.8)
-      '@ai-sdk/vue': 0.0.59(vue@3.5.13(typescript@5.7.3))(zod@3.23.8)
-      '@opentelemetry/api': 1.9.0
-      eventsource-parser: 1.1.2
-      json-schema: 0.4.0
-      jsondiffpatch: 0.6.0
-      secure-json-parse: 2.7.0
-      zod-to-json-schema: 3.24.1(zod@3.23.8)
-    optionalDependencies:
-      openai: 4.73.0(encoding@0.1.13)(zod@3.23.8)
-      zod: 3.23.8
-    transitivePeerDependencies:
-      - solid-js
-      - vue
-
-  ai@3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.24.1))(react@19.0.0)(sswr@2.1.0(svelte@5.20.1))(svelte@5.20.1)(vue@3.5.13(typescript@5.7.3))(zod@3.23.8):
+  ai@3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))(react@19.0.0)(sswr@2.1.0(svelte@5.20.1))(svelte@5.20.1)(vue@3.5.13(typescript@5.7.3))(zod@3.23.8):
     dependencies:
       '@ai-sdk/provider': 1.0.6
       '@ai-sdk/provider-utils': 2.1.6(zod@3.23.8)
@@ -47682,6 +47648,28 @@ snapshots:
       react: 19.0.0
       sswr: 2.1.0(svelte@5.20.1)
       svelte: 5.20.1
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - solid-js
+      - vue
+
+  ai@3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))(zod@3.23.8):
+    dependencies:
+      '@ai-sdk/provider': 1.0.6
+      '@ai-sdk/provider-utils': 2.1.6(zod@3.23.8)
+      '@ai-sdk/react': 0.0.70(react@19.0.0)(zod@3.23.8)
+      '@ai-sdk/solid': 0.0.54(zod@3.23.8)
+      '@ai-sdk/svelte': 0.0.57(svelte@5.20.1)(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.50(zod@3.23.8)
+      '@ai-sdk/vue': 0.0.59(vue@3.5.13(typescript@5.7.3))(zod@3.23.8)
+      '@opentelemetry/api': 1.9.0
+      eventsource-parser: 1.1.2
+      json-schema: 0.4.0
+      jsondiffpatch: 0.6.0
+      secure-json-parse: 2.7.0
+      zod-to-json-schema: 3.24.1(zod@3.23.8)
+    optionalDependencies:
+      openai: 4.73.0(encoding@0.1.13)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
       - solid-js

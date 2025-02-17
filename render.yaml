@@ -23,4 +23,15 @@ services:
         - package.json
         - pnpm-lock.yaml
         - turbo.json
-        - .nvmrc 
+        - .nvmrc
+    disk:
+      name: eliza-cache
+      mountPath: /opt/render/project/src/.turbo
+      sizeGB: 1
+    cache:
+      - name: pnpm-cache
+        mountPath: /opt/render/project/src/.pnpm-store
+        key: pnpm-store-{{ checksum "pnpm-lock.yaml" }}
+      - name: turbo-cache
+        mountPath: /opt/render/project/src/.turbo
+        key: turbo-cache-{{ checksum "turbo.json" }}-{{ checksum "pnpm-lock.yaml" }} 

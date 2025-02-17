@@ -153,3 +153,8 @@ ton_nft_images/
 
 # Temporary development files
 instructions.md
+
+# Packages to exclude from git
+packages/client-twitter/
+packages/adapter-sqljs/
+packages/plugin-twitter/
