@@ -53,23 +53,23 @@ docs/
 *.md
 !README.md
 
-# First exclude all packages
-packages/
+# Exclude all packages by default
+packages/**/*
 
 # Then explicitly include only the essential ones
-!packages/core/
-!packages/adapter-supabase/
-!packages/adapter-postgres/
-!packages/adapter-sqlite/
-!packages/client-direct/
-!packages/client-discord/
-!packages/client-telegram/
-!packages/client-telegram-account/
-!packages/plugin-abstract/
-!packages/plugin-bootstrap/
-!packages/plugin-di/
-!packages/plugin-node/
-!packages/plugin-openai/
+!packages/core/**
+!packages/adapter-supabase/**
+!packages/adapter-postgres/**
+!packages/adapter-sqlite/**
+!packages/client-direct/**
+!packages/client-discord/**
+!packages/client-telegram/**
+!packages/client-telegram-account/**
+!packages/plugin-abstract/**
+!packages/plugin-bootstrap/**
+!packages/plugin-di/**
+!packages/plugin-node/**
+!packages/plugin-openai/**
 
 # Binary and data files
 *.gguf

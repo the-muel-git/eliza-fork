@@ -5,12 +5,14 @@ dist/
 coverage/
 .pnpm-store/
 *.tsbuildinfo
+/out
 
 # Environment and config files
 .env*
 *.config.js
 *.config.ts
 !tsconfig.json
+concatenated-output.ts
 
 # IDE and system files
 .idea/
@@ -20,6 +22,7 @@ coverage/
 *.swp
 *.swo
 .cursorrules
+Thumbs.db
 
 # Logs and debug
 logs/
@@ -28,9 +31,11 @@ debug/
 
 # Cache directories
 cache/
+**/cache/
 content_cache/
 tokencache/
-**/cache/
+node-compile-cache/
+embedding-cache.json
 
 # Test files
 test_data/
@@ -45,446 +50,50 @@ test-report.json
 *.wav
 *.mp3
 *.bin
-*.sqlite
-
-# Database
-db.sqlite
-pgLite/
-
-# First exclude all packages
-packages/
-
-# Then explicitly include only the essential ones
-!packages/core/
-!packages/adapter-supabase/
-!packages/adapter-postgres/
-!packages/adapter-sqlite/
-!packages/client-direct/
-!packages/client-discord/
-!packages/client-telegram/
-!packages/client-telegram-account/
-!packages/plugin-abstract/
-!packages/plugin-bootstrap/
-!packages/plugin-di/
-!packages/plugin-node/
-!packages/plugin-openai/
-
-# Character configurations
-characters/**/
-!characters/eternalai.character.json
-
-# Deployment files
-eliza.manifest
-eliza.manifest.sgx
-eliza.sig
-
-# Dependencies
-node_modules
-.env
-dist/
-logs/
-
-# Build and development artifacts
-.turbo
-.cursorrules
-.pnpm-store
-coverage
-.eslintcache
-tsup.config.bundled_*.mjs
-
-# IDE and system files
-.idea
-.vscode
-.zed
-.DS_Store
-*.swp
-*.swo
-
-# Cache and temporary files
-cache/
-content_cache/
-tokencache/
-*.log
-*.tmp
-*.temp
-
-# Build outputs
-*.tsbuildinfo
-coverage/
-
-# Exclude all packages by default
-packages/**/
-
-# Keep only essential core packages
-!packages/core/
-!packages/adapter-supabase/
-!packages/adapter-postgres/
-!packages/adapter-sqlite/
-!packages/client-direct/
-!packages/client-discord/
-!packages/client-telegram/
-!packages/client-telegram-account/
-
-# Keep only essential core plugins
-!packages/plugin-abstract/
-!packages/plugin-bootstrap/
-!packages/plugin-di/
-!packages/plugin-node/
-!packages/plugin-openai/
-
-# Binary and large files
-*.gguf
-*.onnx
-*.wav
-*.mp3
-*.bin
-
-# Database files
-*.sqlite
-db.sqlite
-pgLite/
-
-# Test and debug files
-test-report.json
-test_data/
-
-# Character configurations
-characters/**/secrets.json
-characters/**/*.env
-characters/**/*.key
-characters/**/private/
-!characters/eternalai.character.json
-
-node_modules
-/out
-
-.env
-.env.production
-.env.local
-.env_main
-concatenated-output.ts
-embedding-cache.json
-packages/plugin-buttplug/intiface-engine
-
-node-compile-cache
-
-.idea
-.vscode
-.zed
-.DS_Store
-
-dist/
-# Allow models directory but ignore model files
-models/*.gguf
-models/*.bin
-models/*.onnx
-models/cache/
-pgLite/
-
-cookies.json
-
-db.sqlite
-searches/
-tweets/
-
-*.gguf
-*.onnx
-*.wav
-*.mp3
-
-logs/
-
-test-report.json
-content_cache/
-test_data/
-tokencache/
-tweetcache/
-twitter_cookies.json
-timeline_cache.json
-
-*.sqlite
-
-# Character configurations
-characters/**/secrets.json
-characters/**/*.env
-characters/**/*.key
-characters/**/private/
-characters/edriziai-info/
-
-packages/core/src/providers/cache
-packages/core/src/providers/cache/*
-cache/*
-packages/plugin-coinbase/src/plugins/transactions.csv
-
-tsup.config.bundled_*.mjs
-
-.turbo
-.cursorrules
-.pnpm-store
-instructions.md
-wallet_data.txt
-
-coverage
-.eslintcache
-
-agent/content
-
-eliza.manifest
-eliza.manifest.sgx
-eliza.sig
-
-packages/plugin-nvidia-nim/extra
-packages/plugin-nvidia-nim/old_code
-packages/plugin-nvidia-nim/docs
-
-# Edriziai specific ignores
-characters/edriziai-info/secrets.json
-
-# Bug Hunter logs and checkpoints
-scripts/bug_hunt/logs/
-scripts/bug_hunt/logs/*.log
-scripts/bug_hunt/checkpoints/
-scripts/bug_hunt/checkpoints/*.json
-scripts/bug_hunt/reports/
-scripts/bug_hunt/reports/*.md
-
-lit-config.json
-
-# Configuration to exclude the extra and local_docs directories
-extra
-**/dist/**
-
-ton_nft_metadata/
-ton_nft_metadata/*
-
-ton_nft_images/
-ton_nft_images/*
-
-# Character files
-characters/my_private_character.json
-characters/*.private.json
-characters/edriziai-info/
-
-# Keep the original character files
-!characters/eternalai.character.json
-
-# Temporary and system files
-*.log
-*.tmp
-*.temp
-.DS_Store
-Thumbs.db
-
-# Large binary files
-*.bin
 *.dat
 *.gz
 *.tar
 *.zip
 *.7z
 
-# Local development
-node-compile-cache/
+# Database and storage
+*.sqlite
+db.sqlite
+pgLite/
+searches/
+cookies.json
 
-# Deployment specific
+# Exclude all packages by default
+packages/**/*
+
+# Then explicitly include only the essential ones
+!packages/core/**
+!packages/adapter-supabase/**
+!packages/adapter-postgres/**
+!packages/adapter-sqlite/**
+!packages/client-direct/**
+!packages/client-discord/**
+!packages/client-telegram/**
+!packages/client-telegram-account/**
+!packages/plugin-abstract/**
+!packages/plugin-bootstrap/**
+!packages/plugin-di/**
+!packages/plugin-node/**
+!packages/plugin-openai/**
+
+# Character configurations
+characters/**/*
+!characters/eternalai.character.json
+
+# Deployment files
 eliza.manifest
 eliza.manifest.sgx
 eliza.sig
-
-# Bug hunter and testing
-scripts/bug_hunt/logs/
-scripts/bug_hunt/logs/*.log
-scripts/bug_hunt/checkpoints/
-scripts/bug_hunt/checkpoints/*.json
-scripts/bug_hunt/reports/
-scripts/bug_hunt/reports/*.md
-
-# Configuration files
-wallet_data.txt
+lit-config.json
 
 # Extra directories
 extra/
-**/dist/**
 ton_nft_metadata/
 ton_nft_images/
-
-# Temporary development files
 instructions.md
-
-# Packages to exclude from git
-packages/client-twitter/
-packages/adapter-sqljs/
-packages/plugin-twitter/
-
-# Additional plugins to exclude
-packages/plugin-giphy/
-packages/plugin-imgflip/
-packages/plugin-suno/
-packages/plugin-open-weather/
-packages/plugin-nft-generation/
-packages/plugin-3d-generation/
-packages/plugin-image-generation/
-packages/plugin-video-generation/
-packages/plugin-rabbi-trader/
-packages/plugin-bittensor/
-packages/plugin-hyperliquid/
-packages/plugin-devin/
-packages/plugin-arthera/
-packages/plugin-allora/
-packages/plugin-opacity/
-packages/plugin-akash/
-packages/plugin-quai/
-packages/plugin-lightning/
-packages/plugin-b2/
-packages/plugin-nft-collections/
-
-# Dependencies
-node_modules
-.env
-dist/
-logs/
-
-# Packages to exclude
-packages/client-twitter/
-packages/client-instagram/
-packages/client-github/
-packages/client-slack/
-packages/client-auto/
-packages/client-farcaster/
-packages/client-deva/
-packages/client-lens/
-packages/client-simsai/
-packages/client-alexa/
-packages/client-xmtp/
-
-# Adapters to exclude
-packages/adapter-pglite/
-packages/adapter-redis/
-packages/adapter-mongodb/
-packages/adapter-qdrant/
-packages/adapter-sqljs/
-
-# Plugins to exclude (all by default)
-packages/plugin-*/
-
-# Keep only essential core plugins
-!packages/plugin-abstract/
-!packages/plugin-bootstrap/
-!packages/plugin-di/
-!packages/plugin-node/
-!packages/plugin-openai/
-
-# Protocol and Chain plugins
-packages/plugin-solana/
-packages/plugin-solana-v2/
-packages/plugin-injective/
-packages/plugin-binance/
-packages/plugin-evm/
-packages/plugin-ethereum/
-packages/plugin-avalanche/
-packages/plugin-cosmos/
-packages/plugin-aptos/
-packages/plugin-sui/
-packages/plugin-near/
-packages/plugin-ton/
-packages/plugin-tron/
-packages/plugin-starknet/
-packages/plugin-zksync/
-packages/plugin-polkadot/
-packages/plugin-multiversx/
-packages/plugin-flow/
-packages/plugin-icp/
-packages/plugin-massa/
-packages/plugin-mina/
-packages/plugin-sei/
-packages/plugin-cronos/
-packages/plugin-cronoszkevm/
-packages/plugin-fuel/
-packages/plugin-zilliqa/
-
-# DeFi and Trading plugins
-packages/plugin-rabbi-trader/
-packages/plugin-arbitrage/
-packages/plugin-defi/
-packages/plugin-dex/
-packages/plugin-zerion/
-packages/plugin-squid-router/
-packages/plugin-0x/
-packages/plugin-1inch/
-packages/plugin-uniswap/
-packages/plugin-desk-exchange/
-packages/plugin-dexscreener/
-packages/plugin-hyperliquid/
-packages/plugin-birdeye/
-packages/plugin-chainbase/
-packages/plugin-coingecko/
-packages/plugin-coinmarketcap/
-packages/plugin-coinbase/
-packages/plugin-moralis/
-
-# AI and Generation plugins
-packages/plugin-image-generation/
-packages/plugin-video-generation/
-packages/plugin-3d-generation/
-packages/plugin-nft-generation/
-packages/plugin-story/
-packages/plugin-suno/
-packages/plugin-devin/
-packages/plugin-quick-intel/
-packages/plugin-mind-network/
-packages/plugin-echochambers/
-packages/plugin-letzai/
-
-# Utility and Integration plugins
-packages/plugin-giphy/
-packages/plugin-imgflip/
-packages/plugin-open-weather/
-packages/plugin-web-search/
-packages/plugin-news/
-packages/plugin-email/
-packages/plugin-form/
-packages/plugin-gitbook/
-packages/plugin-obsidian/
-packages/plugin-intiface/
-packages/plugin-football/
-packages/plugin-nvidia-nim/
-
-# Infrastructure and Network plugins
-packages/plugin-bittensor/
-packages/plugin-arthera/
-packages/plugin-allora/
-packages/plugin-opacity/
-packages/plugin-akash/
-packages/plugin-quai/
-packages/plugin-lightning/
-packages/plugin-b2/
-packages/plugin-nft-collections/
-packages/plugin-tee/
-packages/plugin-tee-log/
-packages/plugin-tee-marlin/
-packages/plugin-tee-verifiable-log/
-packages/plugin-sgx/
-packages/plugin-dcap/
-packages/plugin-autonome/
-packages/plugin-primus/
-packages/plugin-iq6900/
-packages/plugin-genlayer/
-packages/plugin-depin/
-packages/plugin-pyth-data/
-packages/plugin-router-nitro/
-packages/plugin-holdstation/
-packages/plugin-ethstorage/
-packages/plugin-ankr/
-packages/plugin-trikon/
-
-# IDE and OS files
-.idea/
-.vscode/
-*.swp
-.DS_Store
-*.log
-
-# Build artifacts
-*.tsbuildinfo
-.turbo
-coverage/
+wallet_data.txt
