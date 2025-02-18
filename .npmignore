@@ -71,6 +71,7 @@ packages/**/*
 !packages/plugin-node/**
 !packages/plugin-openai/**
 !packages/plugin-elevenlabs/**
+!packages/plugin-gemini/**
 
 # Binary and data files
 *.gguf
