@@ -1,5 +1,5 @@
-import { PGLiteDatabaseAdapter } from "@elizaos/adapter-pglite";
 import { PostgresDatabaseAdapter } from "@elizaos/adapter-postgres";
+import { PGLiteDatabaseAdapter } from "@elizaos/adapter-pglite";
 import { QdrantDatabaseAdapter } from "@elizaos/adapter-qdrant";
 import { RedisClient } from "@elizaos/adapter-redis";
 import { SqliteDatabaseAdapter } from "@elizaos/adapter-sqlite";
@@ -681,7 +681,26 @@ export function getTokenForProvider(
 }
 
 function initializeDatabase(dataDir: string) {
-    if (process.env.MONGODB_CONNECTION_STRING) {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+        elizaLogger.info("Initializing Supabase connection...");
+        const db = new SupabaseDatabaseAdapter(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_ANON_KEY
+        );
+
+        // Test the connection
+        db.init()
+            .then(() => {
+                elizaLogger.success(
+                    "Successfully connected to Supabase database"
+                );
+            })
+            .catch((error) => {
+                elizaLogger.error("Failed to connect to Supabase:", error);
+            });
+
+        return db;
+    } else if (process.env.MONGODB_CONNECTION_STRING) {
         elizaLogger.log("Initializing database on MongoDB Atlas");
         const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING, {
             maxPoolSize: 100,
@@ -705,26 +724,7 @@ function initializeDatabase(dataDir: string) {
             })
             .catch((error) => {
                 elizaLogger.error("Failed to connect to MongoDB Atlas:", error);
-                throw error; // Re-throw to handle it in the calling code
-            });
-
-        return db;
-    } else if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
-        elizaLogger.info("Initializing Supabase connection...");
-        const db = new SupabaseDatabaseAdapter(
-            process.env.SUPABASE_URL,
-            process.env.SUPABASE_ANON_KEY
-        );
-
-        // Test the connection
-        db.init()
-            .then(() => {
-                elizaLogger.success(
-                    "Successfully connected to Supabase database"
-                );
-            })
-            .catch((error) => {
-                elizaLogger.error("Failed to connect to Supabase:", error);
+                throw error;
             });
 
         return db;
@@ -747,15 +747,7 @@ function initializeDatabase(dataDir: string) {
             });
 
         return db;
-    } else if (process.env.PGLITE_DATA_DIR) {
-        elizaLogger.info("Initializing PgLite adapter...");
-        // `dataDir: memory://` for in memory pg
-        const db = new PGLiteDatabaseAdapter({
-            dataDir: process.env.PGLITE_DATA_DIR,
-        });
-        return db;
-    } else if (
-        process.env.QDRANT_URL &&
+    } else if (process.env.QDRANT_URL &&
         process.env.QDRANT_KEY &&
         process.env.QDRANT_PORT &&
         process.env.QDRANT_VECTOR_SIZE
@@ -767,6 +759,12 @@ function initializeDatabase(dataDir: string) {
             Number(process.env.QDRANT_PORT),
             Number(process.env.QDRANT_VECTOR_SIZE)
         );
+        return db;
+    } else if (process.env.PGLITE_DATA_DIR) {
+        elizaLogger.info("Initializing PgLite adapter...");
+        const db = new PGLiteDatabaseAdapter({
+            dataDir: process.env.PGLITE_DATA_DIR,
+        });
         return db;
     } else {
         const filePath =
@@ -958,21 +956,6 @@ export async function createAgent(
         );
     }
 
-    // Initialize Reclaim adapter if environment variables are present
-    // let verifiableInferenceAdapter;
-    // if (
-    //     process.env.RECLAIM_APP_ID &&
-    //     process.env.RECLAIM_APP_SECRET &&
-    //     process.env.VERIFIABLE_INFERENCE_ENABLED === "true"
-    // ) {
-    //     verifiableInferenceAdapter = new ReclaimAdapter({
-    //         appId: process.env.RECLAIM_APP_ID,
-    //         appSecret: process.env.RECLAIM_APP_SECRET,
-    //         modelProvider: character.modelProvider,
-    //         token,
-    //     });
-    //     elizaLogger.log("Verifiable inference adapter initialized");
-    // }
     // Initialize Opacity adapter if environment variables are present
     let verifiableInferenceAdapter;
     if (
