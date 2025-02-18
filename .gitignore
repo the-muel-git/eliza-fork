@@ -1,3 +1,83 @@
+# Dependencies and build artifacts
+node_modules/
+dist/
+.turbo/
+coverage/
+.pnpm-store/
+*.tsbuildinfo
+
+# Environment and config files
+.env*
+*.config.js
+*.config.ts
+!tsconfig.json
+
+# IDE and system files
+.idea/
+.vscode/
+.zed/
+.DS_Store
+*.swp
+*.swo
+.cursorrules
+
+# Logs and debug
+logs/
+*.log
+debug/
+
+# Cache directories
+cache/
+content_cache/
+tokencache/
+**/cache/
+
+# Test files
+test_data/
+__tests__/
+*.test.ts
+*.spec.ts
+test-report.json
+
+# Binary and media files
+*.gguf
+*.onnx
+*.wav
+*.mp3
+*.bin
+*.sqlite
+
+# Database
+db.sqlite
+pgLite/
+
+# First exclude all packages
+packages/
+
+# Then explicitly include only the essential ones
+!packages/core/
+!packages/adapter-supabase/
+!packages/adapter-postgres/
+!packages/adapter-sqlite/
+!packages/client-direct/
+!packages/client-discord/
+!packages/client-telegram/
+!packages/client-telegram-account/
+!packages/plugin-abstract/
+!packages/plugin-bootstrap/
+!packages/plugin-di/
+!packages/plugin-node/
+!packages/plugin-openai/
+
+# Character configurations
+characters/**/
+!characters/eternalai.character.json
+
+# Deployment files
+eliza.manifest
+eliza.manifest.sgx
+eliza.sig
+
 # Dependencies
 node_modules
 .env
