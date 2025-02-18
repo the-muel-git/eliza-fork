@@ -5,6 +5,7 @@ services:
     buildCommand: pnpm install && pnpm run build
     startCommand: pnpm run start
     nodeVersion: 23.3.0
+    plan: standard
     envVars:
       - key: NODE_ENV
         value: production
@@ -34,4 +35,12 @@ services:
         key: pnpm-store-{{ checksum "pnpm-lock.yaml" }}
       - name: turbo-cache
         mountPath: /opt/render/project/src/.turbo
-        key: turbo-cache-{{ checksum "turbo.json" }}-{{ checksum "pnpm-lock.yaml" }} 
+        key: turbo-cache-{{ checksum "turbo.json" }}-{{ checksum "pnpm-lock.yaml" }}
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+      targetMemoryPercent: 80
+      targetCPUPercent: 80
+    resources:
+      memory: 2048
+      cpu: 1000 
