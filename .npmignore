@@ -70,6 +70,7 @@ packages/**/*
 !packages/plugin-di/**
 !packages/plugin-node/**
 !packages/plugin-openai/**
+!packages/plugin-elevenlabs/**
 
 # Binary and data files
 *.gguf

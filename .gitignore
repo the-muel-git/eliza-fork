@@ -80,6 +80,7 @@ packages/**/*
 !packages/plugin-di/**
 !packages/plugin-node/**
 !packages/plugin-openai/**
+!packages/plugin-elevenlabs/**
 
 # Character configurations
 characters/**/*
