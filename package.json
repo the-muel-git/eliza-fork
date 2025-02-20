@@ -8,6 +8,7 @@
     "lint": "biome lint .",
     "check": "biome check --apply .",
     "preinstall": "npx only-allow pnpm",
+    "prebuild": "pnpm --filter \"@elizaos/*\" build",
     "build": "tsc",
     "start": "ts-node src/index.ts",
     "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* NODE_OPTIONS='--max-old-space-size=4096' pnpm --filter \"@elizaos/agent\" start --isRoot",
