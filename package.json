@@ -1,23 +1,28 @@
 {
-  "name": "eliza",
+  "name": "eliza-fork",
+  "version": "1.0.0",
+  "description": "Eliza fork with Supabase integration",
+  "main": "index.js",
   "scripts": {
     "format": "biome format --write .",
     "lint": "biome lint .",
     "check": "biome check --apply .",
     "preinstall": "npx only-allow pnpm",
-    "build": "npx turbo run build --filter=!eliza-docs",
-    "start": "cross-env NODE_OPTIONS='--max-old-space-size=4096' pnpm --filter \"@elizaos/agent\" start --isRoot",
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
     "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* NODE_OPTIONS='--max-old-space-size=4096' pnpm --filter \"@elizaos/agent\" start --isRoot",
     "clean": "bash ./scripts/clean.sh",
-    "test": "bash ./scripts/test.sh"
+    "test": "jest"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
     "cross-env": "7.0.3",
     "jest": "^29.7.0",
     "only-allow": "1.2.1",
-    "typescript": "5.6.3"
+    "typescript": "^5.0.0",
+    "ts-jest": "^29.1.0"
   },
   "pnpm": {
     "overrides": {
@@ -51,7 +56,12 @@
     "ollama-ai-provider": "0.16.1",
     "pnpm": "9.15.0",
     "turbo": "2.3.3",
-    "zod": "3.24.1"
+    "zod": "3.24.1",
+    "@elizaos/adapter-supabase": "workspace:*",
+    "@elizaos/core": "workspace:*",
+    "@google-cloud/logging-winston": "^6.0.0",
+    "winston": "^3.11.0",
+    "ts-node": "^10.9.2"
   },
   "packageManager": "pnpm@9.15.0",
   "workspaces": [

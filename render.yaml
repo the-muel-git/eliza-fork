@@ -11,12 +11,44 @@ services:
         value: production
       - key: NODE_OPTIONS
         value: --max-old-space-size=4096
+      - key: CHARACTER_FILE
+        value: characters/production.character.json
+      # Database Configuration
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_ANON_KEY
         sync: false
-      - key: SUPABASE_SERVICE_KEY
+      # Model Provider Configuration
+      - key: OPENAI_API_KEY
         sync: false
+      - key: OPENAI_ORG_ID
+        sync: false
+      # Client Configuration
+      - key: DISCORD_APPLICATION_ID
+        sync: false
+      - key: DISCORD_API_TOKEN
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      # Voice Configuration
+      - key: ELEVENLABS_XI_API_KEY
+        sync: false
+      - key: ELEVENLABS_MODEL_ID
+        value: eleven_multilingual_v2
+      - key: ELEVENLABS_VOICE_ID
+        value: 21m00Tcm4TlvDq8ikWAM
+      - key: ELEVENLABS_VOICE_STABILITY
+        value: "0.5"
+      - key: ELEVENLABS_VOICE_SIMILARITY_BOOST
+        value: "0.9"
+      - key: ELEVENLABS_VOICE_STYLE
+        value: "0.66"
+      - key: ELEVENLABS_VOICE_USE_SPEAKER_BOOST
+        value: "false"
+      - key: ELEVENLABS_OPTIMIZE_STREAMING_LATENCY
+        value: "4"
+      - key: ELEVENLABS_OUTPUT_FORMAT
+        value: pcm_16000
     autoDeploy: true
     buildFilter:
       paths:
@@ -25,6 +57,7 @@ services:
         - pnpm-lock.yaml
         - turbo.json
         - .nvmrc
+        - characters/**
     disk:
       name: eliza-cache
       mountPath: /opt/render/project/src/.turbo
