@@ -8,6 +8,7 @@
     "lint": "biome lint .",
     "check": "biome check --apply .",
     "preinstall": "npx only-allow pnpm",
+    "prerender": "pnpm install --no-frozen-lockfile",
     "prebuild": "pnpm --filter \"@elizaos/*\" build",
     "build": "tsc",
     "start": "ts-node src/index.ts",

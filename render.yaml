@@ -2,7 +2,7 @@ services:
   - type: worker
     name: eliza-worker
     env: node
-    buildCommand: pnpm install --no-frozen-lockfile && pnpm run build
+    buildCommand: pnpm run prerender && pnpm run build
     startCommand: pnpm run start
     nodeVersion: 23.3.0
     plan: standard
