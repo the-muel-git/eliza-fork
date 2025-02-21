@@ -1,6 +1,10 @@
 import { createLogger, format, transports } from 'winston';
 import { LoggingWinston } from '@google-cloud/logging-winston';
 
+interface LogMetadata {
+  [key: string]: any;
+}
+
 const productionFormat = format.combine(
   format.timestamp(),
   format.json(),
@@ -11,7 +15,7 @@ const productionFormat = format.combine(
 const developmentFormat = format.combine(
   format.colorize(),
   format.timestamp(),
-  format.printf(({ timestamp, level, message, metadata }) => {
+  format.printf(({ timestamp, level, message, metadata }: { timestamp: string; level: string; message: string; metadata: LogMetadata }) => {
     return `${timestamp} ${level}: ${message} ${Object.keys(metadata).length ? JSON.stringify(metadata, null, 2) : ''}`;
   })
 );
@@ -48,24 +52,24 @@ export const agentLogger = logger.child({ component: 'agent' });
 // Add custom logging methods
 export const elizaLogger = {
   ...logger,
-  success: (message: string, metadata = {}) => {
+  success: (message: string, metadata: LogMetadata = {}) => {
     logger.info(`✅ ${message}`, metadata);
   },
-  warning: (message: string, metadata = {}) => {
+  warning: (message: string, metadata: LogMetadata = {}) => {
     logger.warn(`⚠️ ${message}`, metadata);
   },
-  error: (message: string, error?: Error, metadata = {}) => {
+  error: (message: string, error?: Error, metadata: LogMetadata = {}) => {
     logger.error(`❌ ${message}`, {
       ...metadata,
       error: error?.message,
       stack: error?.stack,
     });
   },
-  debug: (message: string, metadata = {}) => {
+  debug: (message: string, metadata: LogMetadata = {}) => {
     logger.debug(`🔍 ${message}`, metadata);
   },
   // Add performance monitoring
-  performance: (operation: string, durationMs: number, metadata = {}) => {
+  performance: (operation: string, durationMs: number, metadata: LogMetadata = {}) => {
     logger.info(`⚡ Performance: ${operation}`, {
       ...metadata,
       durationMs,
@@ -73,14 +77,14 @@ export const elizaLogger = {
     });
   },
   // Add security monitoring
-  security: (event: string, metadata = {}) => {
+  security: (event: string, metadata: LogMetadata = {}) => {
     logger.warn(`🔒 Security: ${event}`, {
       ...metadata,
       timestamp: new Date().toISOString(),
     });
   },
   // Add health check monitoring
-  health: (status: 'healthy' | 'degraded' | 'unhealthy', metadata = {}) => {
+  health: (status: 'healthy' | 'degraded' | 'unhealthy', metadata: LogMetadata = {}) => {
     logger.info(`💓 Health Check: ${status}`, {
       ...metadata,
       timestamp: new Date().toISOString(),

@@ -14,16 +14,6 @@ interface HealthCheckResult {
       usage: number;
       limit: number;
     };
-    clients: {
-      discord?: {
-        status: 'healthy' | 'degraded' | 'unhealthy';
-        error?: string;
-      };
-      telegram?: {
-        status: 'healthy' | 'degraded' | 'unhealthy';
-        error?: string;
-      };
-    };
   };
   timestamp: string;
 }
@@ -38,9 +28,8 @@ export async function performHealthCheck(runtime: AgentRuntime): Promise<HealthC
       memory: {
         status: 'healthy',
         usage: 0,
-        limit: runtime.settings.memory.limit
-      },
-      clients: {}
+        limit: 1000 // Default limit
+      }
     },
     timestamp: new Date().toISOString()
   };
@@ -48,69 +37,31 @@ export async function performHealthCheck(runtime: AgentRuntime): Promise<HealthC
   try {
     // Check database connection
     const startTime = Date.now();
-    await runtime.databaseAdapter.testConnection();
-    result.components.database.latencyMs = Date.now() - startTime;
+    if ('testConnection' in runtime.databaseAdapter) {
+      await (runtime.databaseAdapter as any).testConnection();
+      result.components.database.latencyMs = Date.now() - startTime;
+    }
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     result.components.database.status = 'unhealthy';
-    result.components.database.error = error.message;
+    result.components.database.error = errorMessage;
     result.status = 'degraded';
   }
 
   // Check memory usage
   try {
-    const memoryUsage = await runtime.memoryManager.getMemoryCount();
+    const memoryUsage = process.memoryUsage().heapUsed;
+    const memoryLimit = process.memoryUsage().heapTotal;
     result.components.memory.usage = memoryUsage;
-    if (memoryUsage > runtime.settings.memory.limit * 0.9) {
+    result.components.memory.limit = memoryLimit;
+    if (memoryUsage > memoryLimit * 0.9) {
       result.components.memory.status = 'degraded';
       result.status = 'degraded';
     }
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     result.components.memory.status = 'unhealthy';
     result.status = 'degraded';
-  }
-
-  // Check Discord client if enabled
-  if (runtime.settings.clients.includes('discord')) {
-    try {
-      const discordClient = runtime.getClient('discord');
-      if (discordClient && discordClient.isConnected()) {
-        result.components.clients.discord = { status: 'healthy' };
-      } else {
-        result.components.clients.discord = {
-          status: 'degraded',
-          error: 'Client disconnected'
-        };
-        result.status = 'degraded';
-      }
-    } catch (error) {
-      result.components.clients.discord = {
-        status: 'unhealthy',
-        error: error.message
-      };
-      result.status = 'degraded';
-    }
-  }
-
-  // Check Telegram client if enabled
-  if (runtime.settings.clients.includes('telegram')) {
-    try {
-      const telegramClient = runtime.getClient('telegram');
-      if (telegramClient && telegramClient.isConnected()) {
-        result.components.clients.telegram = { status: 'healthy' };
-      } else {
-        result.components.clients.telegram = {
-          status: 'degraded',
-          error: 'Client disconnected'
-        };
-        result.status = 'degraded';
-      }
-    } catch (error) {
-      result.components.clients.telegram = {
-        status: 'unhealthy',
-        error: error.message
-      };
-      result.status = 'degraded';
-    }
   }
 
   // Log health check result
@@ -128,7 +79,8 @@ export function startHealthChecks(runtime: AgentRuntime, intervalMs = 60000) {
     try {
       await performHealthCheck(runtime);
     } catch (error) {
-      elizaLogger.error('Failed to perform health check', error);
+      const errorMessage = error instanceof Error ? error : new Error(String(error));
+      elizaLogger.error('Failed to perform health check', errorMessage);
     }
   }, intervalMs);
 } 

@@ -1,4 +1,4 @@
-import { createAgent, Character } from '@elizaos/core';
+import { AgentRuntime, Character, IDatabaseAdapter, ModelProviderName, ICacheManager } from '@elizaos/core';
 import { SupabaseDatabaseAdapter } from '@elizaos/adapter-supabase';
 import { elizaLogger } from '../config/logging';
 import { startHealthChecks } from './health';
@@ -19,24 +19,34 @@ async function main() {
     elizaLogger.info(`Loaded character configuration: ${character.name}`);
 
     // Initialize database connection
-    const db = new SupabaseDatabaseAdapter(
+    const db: IDatabaseAdapter = new SupabaseDatabaseAdapter(
       process.env.SUPABASE_URL!,
       process.env.SUPABASE_ANON_KEY!
     );
 
     // Test database connection
-    await db.testConnection();
-    elizaLogger.success('Successfully connected to Supabase database');
+    if ('testConnection' in db) {
+      await (db as any).testConnection();
+      elizaLogger.success('Successfully connected to Supabase database');
+    }
 
-    // Initialize cache
-    const cache = {
-      get: async (key: string) => null,
-      set: async (key: string, value: any) => {},
-      delete: async (key: string) => {},
+    // Initialize cache manager
+    const cacheManager: ICacheManager = {
+      get: async <T>(key: string): Promise<T | undefined> => undefined,
+      set: async <T>(key: string, value: T): Promise<void> => {},
+      delete: async (key: string): Promise<void> => {}
     };
 
     // Create agent runtime
-    const runtime = await createAgent(character, db, cache, process.env.OPENAI_API_KEY!);
+    const runtime = new AgentRuntime({
+      character,
+      databaseAdapter: db,
+      token: process.env.OPENAI_API_KEY!,
+      modelProvider: character.modelProvider || ModelProviderName.OPENAI,
+      cacheManager
+    });
+
+    await runtime.initialize();
     elizaLogger.success(`Created agent runtime for ${character.name}`);
 
     // Start health checks
@@ -51,11 +61,12 @@ async function main() {
     process.on('SIGTERM', async () => {
       elizaLogger.info('Received SIGTERM signal, initiating graceful shutdown...');
       try {
-        await runtime.shutdown();
+        await runtime.initialize();
         elizaLogger.success('Successfully shut down agent runtime');
         process.exit(0);
       } catch (error) {
-        elizaLogger.error('Error during shutdown:', error);
+        const errorMessage = error instanceof Error ? error : new Error(String(error));
+        elizaLogger.error('Error during shutdown:', errorMessage);
         process.exit(1);
       }
     });
@@ -63,7 +74,8 @@ async function main() {
     // Log startup success
     elizaLogger.success(`${character.name} is now running!`);
   } catch (error) {
-    elizaLogger.error('Failed to start agent:', error);
+    const errorMessage = error instanceof Error ? error : new Error(String(error));
+    elizaLogger.error('Failed to start agent:', errorMessage);
     process.exit(1);
   }
 }

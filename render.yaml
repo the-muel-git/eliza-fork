@@ -2,15 +2,46 @@ services:
   - type: worker
     name: eliza-worker
     env: node
-    buildCommand: pnpm install && pnpm run build
-    startCommand: pnpm run start
+    buildCommand: |
+      if [ -d ".pnpm-store" ]; then
+        echo "Using cached dependencies"
+        pnpm install --offline --frozen-lockfile --prod
+      else
+        echo "Installing dependencies"
+        pnpm install --frozen-lockfile --prod
+      fi
+      pnpm install typescript @types/node --save-dev
+      pnpm run build
+      rm -rf node_modules/.cache
+      rm -rf node_modules/@types
+      rm -rf node_modules/typescript
+    startCommand: node dist/src/index.js
     nodeVersion: 23.3.0
     plan: standard
     envVars:
       - key: NODE_ENV
         value: production
       - key: NODE_OPTIONS
-        value: --max-old-space-size=4096
+        value: >-
+          --max-old-space-size=3072
+          --expose-gc
+          --optimize-for-size
+          --gc-interval=100
+          --max-semi-space-size=256
+          --heapsnapshot-near-heap-limit=3
+          --optimize-for-size
+          --no-global-gc-scheduling
+          --no-incremental-marking
+          --max-heap-size=3072
+          --initial-heap-size=2048
+      - key: V8_MAX_OLD_SPACE_SIZE
+        value: "3072"
+      - key: V8_HEAP_SIZE_MB
+        value: "3072"
+      - key: V8_MAX_SEMI_SPACE_SIZE_IN_MB
+        value: "256"
+      - key: UV_THREADPOOL_SIZE
+        value: "4"
       - key: CHARACTER_FILE
         value: characters/production.character.json
       # Database Configuration
@@ -49,7 +80,7 @@ services:
         value: "4"
       - key: ELEVENLABS_OUTPUT_FORMAT
         value: pcm_16000
-    autoDeploy: true
+    autoDeploy: false
     buildFilter:
       paths:
         - packages/**
@@ -58,22 +89,43 @@ services:
         - turbo.json
         - .nvmrc
         - characters/**
+        - tsconfig.json
+        - src/**
+        - config/**
     disk:
       name: eliza-cache
       mountPath: /opt/render/project/src/.turbo
-      sizeGB: 1
+      sizeGB: 5
     cache:
-      - name: pnpm-cache
+      - name: pnpm-store
         mountPath: /opt/render/project/src/.pnpm-store
         key: pnpm-store-{{ checksum "pnpm-lock.yaml" }}
       - name: turbo-cache
         mountPath: /opt/render/project/src/.turbo
         key: turbo-cache-{{ checksum "turbo.json" }}-{{ checksum "pnpm-lock.yaml" }}
+      - name: node-modules
+        mountPath: /opt/render/project/src/node_modules
+        key: node-modules-{{ checksum "pnpm-lock.yaml" }}
+      - name: dist
+        mountPath: /opt/render/project/src/dist
+        key: dist-{{ checksum "tsconfig.json" }}-{{ checksum "src/**/*.ts" }}-{{ checksum "config/**/*.ts" }}
     scaling:
       minInstances: 1
       maxInstances: 1
-      targetMemoryPercent: 80
+      targetMemoryPercent: 70
       targetCPUPercent: 80
     resources:
-      memory: 2048
-      cpu: 1000 
+      memory: 4096
+      cpu: 1000
+    healthCheckPath: /health
+    healthCheckTimeout: 100
+    gracePeriodSeconds: 60
+    restartPolicyType: OnFailure
+    restartPolicyMaxRetries: 5
+    preBootCommand: |
+      node -e "
+      const used = process.memoryUsage();
+      for (let key in used) {
+        console.log(`${key}: ${Math.round(used[key] / 1024 / 1024 * 100) / 100} MB`);
+      }
+      " 
